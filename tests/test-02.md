@@ -47,18 +47,60 @@ La skill deberá detectar múltiples violaciones.
 
 La skill deberá recomendar no ejecutar las operaciones destructivas hasta corregir las condiciones inseguras.
 
+# Resultado para completar Test 02
+
 ## Actual behavior
 
-Pendiente de ejecución.
+La skill analizó las cuatro sentencias SQL y detectó correctamente cuatro violaciones:
+
+1. `PERF-001`
+
+   * Severity: `MEDIUM`
+   * Problema: uso de `SELECT *`.
+
+2. `SEC-001`
+
+   * Severity: `CRITICAL`
+   * Problema: sentencia `DELETE` sin condición `WHERE`.
+
+3. `SEC-002`
+
+   * Severity: `CRITICAL`
+   * Problema: sentencia `UPDATE` sin condición `WHERE`.
+
+4. `CONV-003`
+
+   * Severity: `MEDIUM`
+   * Problema: comparación incorrecta utilizando `= NULL`.
+
+El nivel de riesgo general obtenido fue:
+
+`CRITICAL`
+
+Resumen del resultado:
+
+* Critical: 2
+* High: 0
+* Medium: 2
+* Low: 0
+* Info: 0
+
+La skill recomendó no ejecutar las operaciones `DELETE` y `UPDATE` hasta agregar condiciones `WHERE` seguras.
 
 ## Pass / Fail
 
-Pendiente.
+**PASS**
+
+El comportamiento obtenido coincide con el comportamiento esperado. La skill detectó todas las violaciones principales y asignó correctamente sus niveles de severidad.
 
 ## Problem detected
 
-Pendiente de ejecución.
+Ninguno.
+
+La skill fue capaz de analizar múltiples sentencias y reportar varios hallazgos sin ocultar los problemas de mayor severidad.
 
 ## Modification made to the skill
 
-Pendiente.
+Ninguna.
+
+No fue necesario modificar la skill porque las reglas existentes detectaron correctamente las violaciones incluidas en esta prueba.

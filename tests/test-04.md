@@ -26,18 +26,50 @@ Podrá generar un hallazgo `INFO` indicando que se recomienda revisar los índic
 
 La respuesta deberá distinguir entre un problema confirmado y una recomendación que requiere información adicional.
 
+# Resultado para completar Test 04
+
 ## Actual behavior
 
-Pendiente de ejecución.
+La skill analizó la consulta y detectó que la columna `email` se utiliza como condición de búsqueda mediante `WHERE`.
+
+Sin embargo, reconoció que no existe información suficiente para determinar si la columna necesita un índice.
+
+Se generó el siguiente hallazgo:
+
+* Regla: `PERF-004`
+* Severity: `INFO`
+* Evidencia: `WHERE email = 'ejemplo@email.com'`
+* Problema: no existe información suficiente para determinar si falta un índice.
+* Recomendación: revisar los índices existentes y, cuando el rendimiento sea relevante, analizar el plan de ejecución antes de recomendar la creación de un nuevo índice.
+
+La skill no inventó información sobre los índices existentes, el tamaño de la tabla ni el plan de ejecución.
+
+El nivel de riesgo general obtenido fue:
+
+`INFO`
+
+Resumen del resultado:
+
+* Critical: 0
+* High: 0
+* Medium: 0
+* Low: 0
+* Info: 1
 
 ## Pass / Fail
 
-Pendiente.
+**PASS**
+
+El comportamiento obtenido coincide con el comportamiento esperado. La skill reconoció correctamente que no disponía de información suficiente para confirmar la existencia de un problema de índices.
 
 ## Problem detected
 
-Pendiente de ejecución.
+Ninguno.
+
+La skill diferenció correctamente entre un problema confirmado y una posible recomendación que requiere información adicional.
 
 ## Modification made to the skill
 
-Pendiente.
+Ninguna.
+
+No fue necesario modificar la skill porque las reglas existentes manejaron correctamente la falta de información.

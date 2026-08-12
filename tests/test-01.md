@@ -19,18 +19,38 @@ Resultado esperado:
 * No generar hallazgos artificiales.
 * No recomendar cambios innecesarios.
 
+# Resultado para completar Test 01
+
 ## Actual behavior
 
-Pendiente de ejecución.
+La skill analizó la sentencia `SELECT` y no detectó violaciones de las reglas definidas.
+
+El resultado obtenido fue:
+
+* Overall risk: `NONE`
+* Critical: 0
+* High: 0
+* Medium: 0
+* Low: 0
+* Info: 0
+
+La skill no generó hallazgos artificiales ni recomendaciones innecesarias.
 
 ## Pass / Fail
 
-Pendiente.
+**PASS**
+
+El comportamiento obtenido coincide con el comportamiento esperado.
 
 ## Problem detected
 
-Pendiente de ejecución.
+Ninguno.
+
+La skill respondió correctamente ante una consulta SQL válida.
 
 ## Modification made to the skill
 
-Pendiente. Solo deberá completarse si durante la prueba se detecta un problema que requiera modificar la skill.
+Ninguna.
+
+No fue necesario modificar la skill porque el comportamiento obtenido fue el esperado.
+

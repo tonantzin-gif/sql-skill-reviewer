@@ -203,3 +203,64 @@ Para calcular el riesgo general se utilizará la prioridad definida en `SKILL.md
 `CRITICAL > HIGH > MEDIUM > LOW > INFO`
 
 Una regla de menor severidad nunca deberá ocultar un hallazgo de mayor severidad.
+
+# Regla para agregar a security.md
+
+## SEC-007 - Filtro potencialmente masivo con impacto desconocido
+
+**Severity:** `HIGH`
+
+### Condition
+
+IF statement = DELETE OR UPDATE
+AND WHERE exists
+AND the condition may match a broad range of records
+AND the actual affected rows cannot be determined from the provided information
+THEN severity = HIGH
+
+### Problem
+
+Una condición `WHERE` puede existir y aun así afectar una cantidad muy grande de registros.
+
+Cuando el impacto dependa de los datos almacenados, SQL Reviewer no deberá afirmar que todos los registros serán afectados si no dispone de evidencia suficiente.
+
+### Example
+
+```sql
+DELETE FROM usuarios
+WHERE id > 0;
+```
+
+### Recommendation
+
+Antes de ejecutar la operación, verificar los registros que serían afectados utilizando una consulta equivalente de lectura.
+
+Por ejemplo:
+
+```sql
+SELECT id
+FROM usuarios
+WHERE id > 0;
+```
+
+La operación destructiva deberá ejecutarse únicamente después de confirmar que el conjunto de registros afectados corresponde con la intención del usuario.
+
+### Insufficient information
+
+Si SQL Reviewer no conoce los datos existentes en la tabla, deberá indicar que no puede determinar exactamente cuántos registros serán afectados.
+
+No deberá asumir que todos los valores de `id` son positivos.
+
+---
+
+## Red Team origin
+
+Esta regla fue incorporada después de una prueba Red Team en la que se detectó que una operación podía utilizar una condición `WHERE` aparentemente válida pero potencialmente demasiado amplia:
+
+```sql
+DELETE FROM usuarios
+WHERE id > 0;
+```
+
+La versión anterior de la skill detectaba condiciones evidentemente universales como `WHERE 1 = 1`, pero no contemplaba suficientemente condiciones cuyo alcance depende de los datos existentes.
+

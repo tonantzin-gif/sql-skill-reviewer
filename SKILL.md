@@ -235,6 +235,17 @@ THEN severity = MEDIUM
 
 Si no existe información suficiente para determinar el uso real del campo, la skill deberá indicar la limitación y no asumir que el tipo es incorrecto.
 
+### RULE-013 - Filtro potencialmente masivo
+
+IF statement = DELETE OR UPDATE
+AND WHERE exists
+AND condition may affect a broad range of records
+AND actual affected rows cannot be determined
+THEN severity = HIGH
+
+Do not assume how many rows will be affected.
+Recommend verifying the affected records before execution.
+
 ---
 
 ## Severity levels
