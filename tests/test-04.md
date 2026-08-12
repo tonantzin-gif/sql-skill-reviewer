@@ -30,32 +30,61 @@ La respuesta deberá distinguir entre un problema confirmado y una recomendació
 
 ## Actual behavior
 
-La skill analizó la consulta y detectó que la columna `email` se utiliza como condición de búsqueda mediante `WHERE`.
+La prueba fue ejecutada en Claude utilizando la versión actualizada del repositorio
+`sql-skill-reviewer` desde GitHub.
 
-Sin embargo, reconoció que no existe información suficiente para determinar si la columna necesita un índice.
+La skill detectó que el usuario solicitó explícitamente evaluar si la columna
+`email` necesita un índice.
 
 Se generó el siguiente hallazgo:
 
-* Regla: `PERF-004`
-* Severity: `INFO`
-* Evidencia: `WHERE email = 'ejemplo@email.com'`
-* Problema: no existe información suficiente para determinar si falta un índice.
-* Recomendación: revisar los índices existentes y, cuando el rendimiento sea relevante, analizar el plan de ejecución antes de recomendar la creación de un nuevo índice.
+- Regla: RULE-011
+- Severidad: INFO
+- Problema: revisión potencial de índice.
+- Evidencia: WHERE email = 'ejemplo@email.com'
+- Razón: no se proporcionó información sobre los índices existentes en la tabla
+  usuarios.
+- Recomendación: verificar si la columna email cuenta con un índice cuando esta
+  consulta se ejecute frecuentemente o sobre una tabla con un volumen considerable
+  de registros.
 
-La skill no inventó información sobre los índices existentes, el tamaño de la tabla ni el plan de ejecución.
+La skill no afirmó que la columna careciera de índice y reconoció correctamente
+la falta de información.
 
-El nivel de riesgo general obtenido fue:
+El riesgo general obtenido fue:
 
-`INFO`
+INFO
 
-Resumen del resultado:
+Resumen:
 
-* Critical: 0
-* High: 0
-* Medium: 0
-* Low: 0
-* Info: 1
+- Critical: 0
+- High: 0
+- Medium: 0
+- Low: 0
+- Info: 1
 
+## Pass / Fail
+
+PASS
+
+El comportamiento obtenido coincide con el comportamiento esperado.
+
+La skill reconoció correctamente que no dispone de información suficiente para
+confirmar si la columna email necesita un índice.
+
+## Problem detected
+
+Ninguno.
+
+La versión actualizada de RULE-011 funcionó correctamente y solamente generó
+el hallazgo INFO porque el usuario solicitó explícitamente un análisis de índices.
+
+## Modification made to the skill
+
+Ninguna adicional.
+
+La modificación realizada previamente a RULE-011 permitió manejar correctamente
+esta prueba sin inventar información sobre los índices existentes.
 ## Pass / Fail
 
 **PASS**
