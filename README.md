@@ -14,7 +14,7 @@ La skill no ejecuta consultas ni modifica bases de datos. Su función es analiza
 ## Integrantes
 
 * Tonanzin Valentín Hernandez
-* Janeth Aguelles Contreras
+* Janeth Cabrera Arguelles
 
 ## Funcionalidades principales
 
