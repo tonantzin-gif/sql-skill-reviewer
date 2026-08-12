@@ -100,3 +100,27 @@ La regla `SEC-004` permitió detectar correctamente que `LIKE '%'` representa un
 Ninguna.
 
 No fue necesario modificar la skill porque la regla existente detectó correctamente la entrada adversarial.
+
+## Retest
+
+Después de modificar la skill, se volvió a ejecutar la misma consulta en Claude utilizando la versión actualizada del repositorio desde GitHub.
+
+La skill aplicó correctamente:
+
+- Regla: RULE-014
+- Severidad: CRITICAL
+- Problema: filtro demasiado amplio en operación UPDATE.
+- Evidencia: WHERE email LIKE '%'
+- Recomendación: DO NOT EXECUTE.
+
+El resultado general fue:
+
+CRITICAL
+
+## Final result
+
+PASS
+
+La modificación permitió que la skill aplicara una regla específica para filtros demasiado amplios y evitó confundir este caso con una condición evidentemente siempre verdadera.
+
+La explicación también fue corregida para indicar que LIKE '%' puede coincidir con prácticamente todos los valores no nulos, sin afirmar que necesariamente coincide con todos los registros.
