@@ -148,6 +148,19 @@ Ejemplos de condiciones evidentemente inseguras:
 
 La existencia de `WHERE` por sí sola no significa que una operación sea segura.
 
+Los patrones LIKE '%' deberán evaluarse mediante la regla específica
+de filtros demasiado amplios y no mediante RULE-003.
+
+Los patrones demasiado amplios como LIKE '%' deberán ser evaluados mediante
+RULE-014 / SEC-004 y no mediante RULE-003.
+
+RULE-003 deberá utilizarse principalmente para condiciones evidentemente siempre
+verdaderas, como:
+
+- WHERE 1 = 1
+- WHERE TRUE
+- WHERE id = id
+
 ### RULE-004 - Operación destructiva
 
 IF statement contains DROP OR TRUNCATE
@@ -253,6 +266,33 @@ THEN severity = HIGH
 Do not assume how many rows will be affected.
 Recommend verifying the affected records before execution.
 
+### RULE-014 - Filtro demasiado amplio
+
+SI statement = DELETE OR UPDATE
+Y WHERE utiliza un patrón evidentemente demasiado amplio, como LIKE '%'
+ENTONCES severity = CRITICAL
+
+La skill deberá reconocer que la existencia de una condición WHERE no garantiza
+que la operación sea segura cuando el filtro puede coincidir con una gran cantidad
+de registros.
+
+Ejemplo:
+
+UPDATE usuarios
+SET rol = 'ADMIN'
+WHERE email LIKE '%';
+
+La skill deberá indicar que LIKE '%' puede coincidir con prácticamente todos los
+valores no nulos de la columna.
+
+NO deberá afirmar que necesariamente coincide con todos los registros.
+
+La recomendación deberá ser:
+
+DO NOT EXECUTE.
+
+Se deberá utilizar una condición específica que limite correctamente los registros
+que realmente deben modificarse o eliminarse.
 ---
 
 ## Severity levels

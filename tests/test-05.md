@@ -31,28 +31,57 @@ La skill no deberá clasificar automáticamente la operación como segura.
 
 ## Actual behavior
 
-La skill analizó la sentencia `UPDATE` y reconoció que, aunque contiene una condición `WHERE`, el filtro utilizado es demasiado amplio.
+La prueba fue ejecutada en Claude utilizando la versión actualizada del repositorio
+`sql-skill-reviewer` desde GitHub.
 
-Se detectó el siguiente hallazgo:
+La skill identificó correctamente que la condición:
 
-* Regla: `SEC-004`
-* Severity: `CRITICAL`
-* Problema: filtro demasiado amplio.
-* Evidencia: `WHERE email LIKE '%'`
-* Razón: el patrón `%` puede coincidir con prácticamente todos los valores no nulos de la columna `email`, provocando una modificación masiva.
-* Recomendación: `DO NOT EXECUTE` hasta sustituir la condición por un filtro específico que limite correctamente los registros afectados.
+WHERE email LIKE '%'
 
-El nivel de riesgo general obtenido fue:
+representa un filtro demasiado amplio para una operación UPDATE.
 
-`CRITICAL`
+El resultado obtenido fue:
 
-Resumen del resultado:
+- Regla aplicada: RULE-003
+- Severidad: CRITICAL
+- Riesgo general: CRITICAL
 
-* Critical: 1
-* High: 0
-* Medium: 0
-* Low: 0
-* Info: 0
+La skill recomendó no ejecutar la sentencia hasta utilizar una condición
+más específica.
+
+Sin embargo, se detectaron dos diferencias respecto al comportamiento esperado:
+
+1. Se utilizó RULE-003 en lugar de SEC-004.
+2. La explicación indicó que LIKE '%' coincide con cualquier valor de email,
+   cuando sería más preciso indicar que puede coincidir con prácticamente
+   todos los valores no nulos.
+
+## Pass / Fail
+
+FAIL - Ejecución inicial
+
+## Problem detected
+
+Existe una superposición entre RULE-003 y SEC-004.
+
+La condición LIKE '%' puede ser interpretada tanto como un WHERE inseguro
+como un filtro demasiado amplio, lo que provoca que la skill no aplique
+siempre la misma regla.
+
+Además, la explicación debe evitar afirmar que LIKE '%' coincide con todos
+los valores, ya que pueden existir valores NULL.
+
+## Modification made to the skill
+
+Se deberá establecer que los patrones amplios como LIKE '%' sean evaluados
+primero mediante SEC-004.
+
+RULE-003 quedará reservada principalmente para condiciones evidentemente
+siempre verdaderas como:
+
+- WHERE 1 = 1
+- WHERE TRUE
+- WHERE id = id
 
 ## Pass / Fail
 
