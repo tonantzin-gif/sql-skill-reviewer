@@ -51,56 +51,62 @@ La skill deberá recomendar no ejecutar las operaciones destructivas hasta corre
 
 ## Actual behavior
 
-La skill analizó las cuatro sentencias SQL y detectó correctamente cuatro violaciones:
+La prueba fue ejecutada en Claude utilizando la versión actualizada del repositorio
+`sql-skill-reviewer` desde GitHub.
 
-1. `PERF-001`
+La skill detectó cinco hallazgos:
 
-   * Severity: `MEDIUM`
-   * Problema: uso de `SELECT *`.
+1. RULE-005 / PERF-001
+   Severity: MEDIUM
+   Problema: uso de SELECT *.
 
-2. `SEC-001`
+2. RULE-006 / PERF-002
+   Severity: MEDIUM
+   Problema: consulta potencialmente masiva sin LIMIT.
 
-   * Severity: `CRITICAL`
-   * Problema: sentencia `DELETE` sin condición `WHERE`.
+3. RULE-001 / SEC-001
+   Severity: CRITICAL
+   Problema: DELETE sin WHERE.
 
-3. `SEC-002`
+4. RULE-002 / SEC-002
+   Severity: CRITICAL
+   Problema: UPDATE sin WHERE.
 
-   * Severity: `CRITICAL`
-   * Problema: sentencia `UPDATE` sin condición `WHERE`.
+5. RULE-009
+   Severity: MEDIUM
+   Problema: comparación incorrecta con NULL.
 
-4. `CONV-003`
+El riesgo general obtenido fue:
 
-   * Severity: `MEDIUM`
-   * Problema: comparación incorrecta utilizando `= NULL`.
+CRITICAL
 
-El nivel de riesgo general obtenido fue:
+Resumen:
 
-`CRITICAL`
-
-Resumen del resultado:
-
-* Critical: 2
-* High: 0
-* Medium: 2
-* Low: 0
-* Info: 0
-
-La skill recomendó no ejecutar las operaciones `DELETE` y `UPDATE` hasta agregar condiciones `WHERE` seguras.
-
+- Critical: 2
+- High: 0
+- Medium: 3
+- Low: 0
+- Info: 0
+git 
 ## Pass / Fail
 
 **PASS**
 
-El comportamiento obtenido coincide con el comportamiento esperado. La skill detectó todas las violaciones principales y asignó correctamente sus niveles de severidad.
+La skill detectó todos los problemas principales esperados y adicionalmente
+identificó correctamente que SELECT * FROM usuarios; puede representar una
+consulta potencialmente masiva sin LIMIT.
 
 ## Problem detected
 
-Ninguno.
+No se detectó un problema en la skill.
 
-La skill fue capaz de analizar múltiples sentencias y reportar varios hallazgos sin ocultar los problemas de mayor severidad.
+Se observó que el comportamiento esperado original del test no contemplaba
+PERF-002, aunque esta regla sí aplica correctamente a SELECT * FROM usuarios;
+porque la consulta no contiene una condición restrictiva ni LIMIT.
 
 ## Modification made to the skill
 
 Ninguna.
 
-No fue necesario modificar la skill porque las reglas existentes detectaron correctamente las violaciones incluidas en esta prueba.
+No fue necesario modificar la skill. Únicamente se actualizó la documentación
+del test para reflejar el hallazgo adicional válido.

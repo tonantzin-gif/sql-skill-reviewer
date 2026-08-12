@@ -89,3 +89,22 @@ no genere automáticamente un hallazgo.
 Ahora un hallazgo INFO relacionado con índices solamente debe generarse cuando
 el usuario solicite explícitamente un análisis de índices o rendimiento, o cuando
 exista evidencia razonable de un posible problema de rendimiento.
+
+## Retest
+
+Después de modificar RULE-011 y PERF-004, se volvió a ejecutar la misma consulta en Claude utilizando la versión actualizada del repositorio desde GitHub.
+
+Resultado obtenido:
+
+- Overall risk: NONE
+- Critical: 0
+- High: 0
+- Medium: 0
+- Low: 0
+- Info: 0
+
+## Final result
+
+PASS
+
+La modificación eliminó el hallazgo artificial relacionado con índices y la consulta válida ahora se clasifica correctamente sin problemas.
