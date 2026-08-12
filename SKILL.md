@@ -219,13 +219,20 @@ Ejemplos:
 
 La skill deberá explicar por qué el nombre dificulta la comprensión antes de generar el hallazgo.
 
-### RULE-011 - Posible índice faltante
+### RULE-011 - Revisión potencial de índice
 
-IF query filters, joins or orders by a column
-AND index information is not provided
-THEN severity = INFO
+SI el usuario solicita explícitamente un análisis de índices o rendimiento
+O la consulta contiene evidencia razonable de un posible problema de rendimiento
+Y no se proporciona información sobre los índices existentes
+ENTONCES severity = INFO
 
-La skill podrá recomendar revisar los índices, pero no deberá afirmar que falta un índice sin disponer de información sobre los índices existentes.
+No generar un hallazgo relacionado con índices únicamente porque una columna
+aparezca en WHERE, JOIN u ORDER BY.
+
+Si la consulta es simple y no existe evidencia de un problema de rendimiento,
+no se debe generar un hallazgo INFO de manera artificial.
+
+La skill no debe asumir si un índice existe o no.
 
 ### RULE-012 - Tipo de dato potencialmente inadecuado
 

@@ -54,3 +54,38 @@ Ninguna.
 
 No fue necesario modificar la skill porque el comportamiento obtenido fue el esperado.
 
+## Actual behavior
+
+La prueba fue ejecutada en Claude utilizando el repositorio
+`sql-skill-reviewer` conectado desde GitHub.
+
+La versión inicial de la skill generó:
+
+- Regla: RULE-011 / PERF-004
+- Severidad: INFO
+- Problema: posible índice no confirmado.
+- Riesgo general: INFO
+
+El comportamiento no coincidió con el resultado esperado, ya que la consulta
+no presentaba un problema evidente y se esperaba un riesgo general NONE.
+
+## Pass / Fail
+
+FAIL - Ejecución inicial
+
+## Problem detected
+
+La regla RULE-011 / PERF-004 era demasiado amplia porque generaba una recomendación
+INFO cada vez que una columna aparecía en WHERE sin disponer de información sobre
+los índices existentes.
+
+Esto provocaba hallazgos artificiales incluso en consultas simples y correctas.
+
+## Modification made to the skill
+
+Se modificaron RULE-011 y PERF-004 para que la ausencia de información sobre índices
+no genere automáticamente un hallazgo.
+
+Ahora un hallazgo INFO relacionado con índices solamente debe generarse cuando
+el usuario solicite explícitamente un análisis de índices o rendimiento, o cuando
+exista evidencia razonable de un posible problema de rendimiento.

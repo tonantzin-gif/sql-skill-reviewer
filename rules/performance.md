@@ -103,11 +103,23 @@ Seleccionar un límite coherente con el objetivo de la consulta y con la cantida
 
 **Severity:** `INFO`
 
-### Condition
+### Condición
 
-IF query uses a column in WHERE, JOIN or ORDER BY
-AND index information is not provided
-THEN severity = INFO
+SI el usuario solicita explícitamente un análisis de índices o rendimiento
+O la consulta contiene evidencia razonable de un posible problema de rendimiento
+Y no se proporciona información sobre los índices existentes
+ENTONCES severity = INFO
+
+### Validación
+
+La presencia de una columna en WHERE, JOIN u ORDER BY no es suficiente por sí sola
+para generar este hallazgo.
+
+SQL Reviewer no debe generar un hallazgo INFO únicamente porque no se proporcionó
+información sobre índices.
+
+En consultas simples, sin evidencia de un problema de rendimiento, no se debe
+generar una recomendación sobre índices.
 
 ### Problem
 
